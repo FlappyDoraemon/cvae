@@ -6,7 +6,7 @@ require 'nn'
 -------------------------------------------------------------------
 
 for idx = 1 , 2 do
-    train_process.train(idx, 3)
+    -- train_process.train(idx, 3)
 end
 
 if(not paths.filep("cifar100-train.t7")) then
@@ -17,7 +17,10 @@ if(not paths.filep("cifar100-train.t7")) then
 end
 testset = torch.load('cifar100-test.t7')
 trainset = torch.load('cifar100-train.t7')
-process.view(testset.data[1])
+
+for i = 1 , 10 do
+    train_process.view(testset.data[i],i)
+end
 
 
 ----------------------------------------------------------------------

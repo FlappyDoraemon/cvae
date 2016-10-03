@@ -107,10 +107,10 @@ function process.train(iteration,times)
         learningRate = 0.001
     }
     local state = {}
-    local lowerbound = 0
     local index_lenth = trainset.data:size(1)
     for i = 1 , times do
-        print('main iteration:',iteration,'; train_function iteration:',i,'/',times,)
+        print('main iteration:',iteration,'; train_function iteration:',i,'/',times)
+        local lowerbound = 0
         local tic = torch.tic()
         for j = 1 , index_lenth do
             local seq = torch.randperm(index_lenth)  
@@ -144,23 +144,25 @@ function process.train(iteration,times)
     torch.save('cvae_decoder.t7',decoder)
 end
 
-function process.view(img_temp)
+function process.view(img_temp,index)
     local encoder
     local decoder
     local reconstruction, model
-    local mean, log_var
-    local input = img_temp:float()/255.0
+    local latent
+    local inputs = img_temp:float()/255.0
     encoder = torch.load('cvae_encoder.t7')
     decoder = torch.load('cvae_decoder.t7')
     input = nn.Identity()()
     mean, log_var = encoder(input):split(2)
     reconstruction = decoder(mean)
     model = nn.gModule({input},{reconstruction, mean, log_var})
-    local reconstruction, reconstruction_var, mean, log_var
-    reconstruction, mean, log_var = unpack(model:forward(inputs))
+------
+    local reconstruction_image, mean, log_var
+    latent = encoder:forward(inputs:cuda())--:split(2)
+    reconstruction_image = decoder:forward(latent[1])
     local names = torch.load('c100_names.t7')
-    image.display{image = img_temp*255.0,zoom=4,legend=names.fine_label_names[outputnum]}
-    image.display{image = reconstruction*255.0,zoom=4,legend='reconstructed'}
+    image.display{image = img_temp, zoom=4, legend=names.fine_label_names[index]}
+    image.display{image = reconstruction_image*255.0, zoom=4, legend='reconstructed'}
 end
 
 
