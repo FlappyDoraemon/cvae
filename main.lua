@@ -5,8 +5,8 @@ require 'nn'
 -- PART 0 : CIFAR TEST
 -------------------------------------------------------------------
 
-for idx = 1 , 2 do
-    -- train_process.train(idx, 3)
+for idx = 1 , 10 do
+    train_process.train(idx, 90)
 end
 
 if(not paths.filep("cifar100-train.t7")) then
