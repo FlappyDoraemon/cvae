@@ -2,7 +2,7 @@ require 'torch'
 require 'nn'
 
 local VAE = {}
-
+ -- -- add here for testing whether push successfully
 function VAE.get_encoder(iamge_edge, latent_variable_size)
      -- The Encoder
     local encoder = nn.Sequential()
